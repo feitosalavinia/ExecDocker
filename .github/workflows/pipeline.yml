@@ -1,0 +1,36 @@
+name: Pyapp
+ 
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+ 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+ 
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+ 
+    - name: Configurar Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.12.2
+ 
+    - name: Instalando dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+ 
+    - name: Testes
+      run: |
+        coverage run -m app_test
+ 
+    - name: Resultados
+      run: coverage report
+
+    - name: Docker Build & Push Action
+      uses: mr-smithers-excellent/docker-build-push@v6.4
+            
